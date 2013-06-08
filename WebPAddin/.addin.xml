@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Addin id="WebP" version="1.0" category="File Formats">
+	<!-- This is the information shown in the add-in manager, with translations -->
+	<Header>
+		<Name>WebP</Name>
+		<Description>TODO</Description>
+		<Author>Pinta Project</Author>
+		<!--<Url>https://github.com/PintaProject/</Url>-->
+	</Header>
+	<Dependencies>
+		<Addin id="Pinta" version="1.5" />
+	</Dependencies>
+</Addin>
