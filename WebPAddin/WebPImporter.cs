@@ -25,25 +25,129 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using Gdk;
+using Pinta.Core;
 
 namespace WebPAddin
 {
 	public class WebPImporter : Pinta.Core.IImageImporter
 	{
-		public WebPImporter ()
+		/// <summary>
+		/// Imports a document into Pinta.
+		/// </summary>
+		/// <param name='fileName'>
+		/// The name of the file to be imported.
+		/// </param>
+		public void Import (string filename)
 		{
+			int width, height, stride;
+			byte[] image_data;
+
+			LoadImage (filename, out image_data, out width, out height, out stride);
+
+			// Create a new document and add an initial layer.
+			Document doc = PintaCore.Workspace.CreateAndActivateDocument (filename, new Size (width, height));
+			doc.HasFile = true;
+			doc.Workspace.CanvasSize = doc.ImageSize;
+			Layer layer = doc.AddNewLayer (Path.GetFileName (filename));
+
+			// Copy over the image data to the layer's surface.
+			CopyToSurface (image_data, layer.Surface);
 		}
 
-		public void Import (string fileName)
-		{
-			throw new NotImplementedException ();
-		}
-
+		/// <summary>
+		/// Returns a thumbnail of an image.
+		/// If the format provides an efficient way to load a smaller version of
+		/// the image, it is suggested to use that method to load a thumbnail
+		/// no larger than the given width and height parameters. Otherwise, the
+		/// returned pixbuf will need to be rescaled by the calling code if it
+		/// exceeds the maximum size.
+		/// </summary>
+		/// <returns>
+		/// The thumbnail, or null if the image could not be loaded.
+		/// </returns>
+		/// <param name='maxWidth'>
+		/// The maximum width of the thumbnail.
+		/// </param>
+		/// <param name='maxHeight'>
+		/// The maximum height of the thumbnail.
+		/// </param>
 		public Pixbuf LoadThumbnail (string filename, int maxWidth, int maxHeight)
 		{
-			throw new NotImplementedException ();
+			int width, height, stride;
+			byte[] image_data;
+
+			LoadImage (filename, out image_data, out width, out height, out stride);
+
+			using (var surf = new Cairo.ImageSurface (image_data, Cairo.Format.ARGB32, width, height, stride)) {
+				return surf.ToPixbuf ();
+			}
 		}
+
+		/// <summary>
+		/// Load a WebP image.
+		/// </summary>
+		/// <param name="filename">The name of the image file.</param>
+		/// <param name="image_data">An array of BGRA values for the image.</param>
+		/// <param name="width">The width of the image.</param>
+		/// <param name="height">The height of the image.</param>
+		/// <param name="stride">The distance (in bytes) between scanlines.</param>
+		private static void LoadImage (string filename, out byte[] image_data,
+		                               out int width,out int height, out int stride)
+		{
+			byte[] raw_data = File.ReadAllBytes (filename);
+			uint raw_data_size = (uint)raw_data.Length;
+			width = 0;
+			height = 0;
+
+			if (WebPGetInfo (raw_data, raw_data_size, ref width, ref height) == 0)
+				throw new FormatException ("Error loading file info");
+
+			stride = width * ColorBgra.SizeOf;
+			int output_buffer_size = height * stride;
+			image_data = new byte[output_buffer_size];
+
+			UIntPtr result = WebPDecodeBGRAInto (raw_data, raw_data_size, image_data, output_buffer_size, stride);
+			if (result == UIntPtr.Zero)
+				throw new FormatException ("Error loading file");
+		}
+
+		/// <summary>
+		/// Copy image data to the layer's surface.
+		/// </summary>
+		/// <param name="image_data">Array of image data in RGBA format.</param>
+		private static unsafe void CopyToSurface (byte[] image_data, Cairo.ImageSurface surf)
+		{
+			if (image_data.Length != surf.Data.Length)
+				throw new ArgumentException ("Mismatched image sizes");
+
+			surf.Flush ();
+
+			ColorBgra* dst = (ColorBgra *)surf.DataPtr;
+			int len = image_data.Length / ColorBgra.SizeOf;
+
+			fixed (byte *src_bytes = image_data) {
+				ColorBgra *src = (ColorBgra *)src_bytes;
+
+				for (int i = 0; i < len; ++i) {
+					*dst++ = *src++;
+				}
+			}
+
+			surf.MarkDirty ();
+		}
+
+		#region Native Methods
+
+		[DllImport ("libwebp")]
+		private static extern int WebPGetInfo(byte[] data, UInt32 data_size, ref int width, ref int height);
+
+		[DllImport ("libwebp")]
+		private static extern UIntPtr WebPDecodeBGRAInto(byte[] data, uint data_size, byte[] output_buffer,
+		                                                 int output_buffer_size, int output_stride);
+		#endregion
 	}
 }
 

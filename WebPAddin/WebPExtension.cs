@@ -34,12 +34,15 @@ namespace WebPAddin
 	{
 		public void Initialize ()
 		{
-			System.Console.Error.WriteLine ("Initializing");
+			// Register the file format.
+			PintaCore.System.ImageFormats.RegisterFormat (
+				new FormatDescriptor("webp", "WebP", new string[] {"webp"},
+									 new WebPImporter (), null));
 		}
 
 		public void Uninitialize ()
 		{
-			System.Console.Error.WriteLine ("Uninitializing");
+			PintaCore.System.ImageFormats.UnregisterFormatByExtension ("webp");
 		}
 	}
 }
