@@ -3,9 +3,9 @@
 	<!-- This is the information shown in the add-in manager, with translations -->
 	<Header>
 		<Name>WebP</Name>
-		<Description>TODO</Description>
+		<Description>Provides support for the WebP image format.</Description>
 		<Author>Pinta Project</Author>
-		<!--<Url>https://github.com/PintaProject/</Url>-->
+                <Url>https://github.com/PintaProject/WebPAddin</Url>
 	</Header>
 	<Dependencies>
 		<Addin id="Pinta" version="1.5" />
