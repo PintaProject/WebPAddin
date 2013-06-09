@@ -1,5 +1,5 @@
 //
-// WebPExtension.cs
+// WebPExporter.cs
 //
 // Author:
 //       Cameron White <cameronwhite91@gmail.com>
@@ -25,24 +25,42 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using Gtk;
 using Pinta.Core;
 
 namespace WebPAddin
 {
-	[Mono.Addins.Extension]
-	public class WebPExtension : IExtension
+	public class WebPExporter : Pinta.Core.IImageExporter
 	{
-		public void Initialize ()
+		/// <summary>
+		/// Exports a document to a file.
+		/// </summary>
+		/// <param name='document'>
+		/// The document to be saved.
+		/// </param>
+		/// <param name='fileName'>
+		/// File name to save to.
+		/// </param>
+		/// <param name='parent'>
+		/// Window to be used as a parent for any dialogs that are shown.
+		/// </param>
+		public void Export (Document document, string fileName, Window parent)
 		{
-			// Register the file format.
-			PintaCore.System.ImageFormats.RegisterFormat (
-				new FormatDescriptor("WebP", new string[] {"webp"},
-									 new WebPImporter (), new WebPExporter ()));
-		}
+			using (var surface = document.GetFlattenedImage ()) {
+				// Encode the image.
+				var output = IntPtr.Zero;
+				uint length = NativeMethods.WebPEncodeBGRA (surface.Data, surface.Width, surface.Height,
+				                                            surface.Stride, 80, ref output);
+				byte[] data = new byte[length];
+				Marshal.Copy (output, data, 0, (int)length);
+				// The caller is responsible for calling free() with the array allocated by WebPEncodeBGRA.
+				NativeMethods.Free (output);
 
-		public void Uninitialize ()
-		{
-			PintaCore.System.ImageFormats.UnregisterFormatByExtension ("webp");
+				// Save the encoded data to the file.
+				File.WriteAllBytes (fileName, data);
+			}
 		}
 	}
 }

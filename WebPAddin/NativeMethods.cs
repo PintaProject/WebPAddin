@@ -1,5 +1,5 @@
 //
-// WebPExtension.cs
+// NativeMethods.cs
 //
 // Author:
 //       Cameron White <cameronwhite91@gmail.com>
@@ -25,25 +25,25 @@
 // THE SOFTWARE.
 
 using System;
-using Pinta.Core;
+using System.Runtime.InteropServices;
 
 namespace WebPAddin
 {
-	[Mono.Addins.Extension]
-	public class WebPExtension : IExtension
+	public class NativeMethods
 	{
-		public void Initialize ()
-		{
-			// Register the file format.
-			PintaCore.System.ImageFormats.RegisterFormat (
-				new FormatDescriptor("WebP", new string[] {"webp"},
-									 new WebPImporter (), new WebPExporter ()));
-		}
+		[DllImport ("libwebp")]
+		public static extern int WebPGetInfo(byte[] data, uint data_size, ref int width, ref int height);
 
-		public void Uninitialize ()
-		{
-			PintaCore.System.ImageFormats.UnregisterFormatByExtension ("webp");
-		}
+		[DllImport ("libwebp")]
+		public static extern UIntPtr WebPDecodeBGRAInto(byte[] data, uint data_size, byte[] output_buffer,
+		                                                int output_buffer_size, int output_stride);
+
+		[DllImport ("libwebp")]
+		public static extern uint WebPEncodeBGRA(byte[] data, int width, int height, int stride,
+		                                         float quality_factor, ref IntPtr output);
+
+		[DllImport ("libc", EntryPoint="free")]
+		public static extern void Free (IntPtr ptr);
 	}
 }
 

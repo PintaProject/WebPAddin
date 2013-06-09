@@ -26,7 +26,6 @@
 
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Gdk;
 using Pinta.Core;
 
@@ -102,14 +101,15 @@ namespace WebPAddin
 			width = 0;
 			height = 0;
 
-			if (WebPGetInfo (raw_data, raw_data_size, ref width, ref height) == 0)
+			if (NativeMethods.WebPGetInfo (raw_data, raw_data_size, ref width, ref height) == 0)
 				throw new FormatException ("Error loading file info");
 
 			stride = width * ColorBgra.SizeOf;
 			int output_buffer_size = height * stride;
 			image_data = new byte[output_buffer_size];
 
-			UIntPtr result = WebPDecodeBGRAInto (raw_data, raw_data_size, image_data, output_buffer_size, stride);
+			UIntPtr result = NativeMethods.WebPDecodeBGRAInto (raw_data, raw_data_size, image_data,
+			                                                   output_buffer_size, stride);
 			if (result == UIntPtr.Zero)
 				throw new FormatException ("Error loading file");
 		}
@@ -138,16 +138,6 @@ namespace WebPAddin
 
 			surf.MarkDirty ();
 		}
-
-		#region Native Methods
-
-		[DllImport ("libwebp")]
-		private static extern int WebPGetInfo(byte[] data, UInt32 data_size, ref int width, ref int height);
-
-		[DllImport ("libwebp")]
-		private static extern UIntPtr WebPDecodeBGRAInto(byte[] data, uint data_size, byte[] output_buffer,
-		                                                 int output_buffer_size, int output_stride);
-		#endregion
 	}
 }
 

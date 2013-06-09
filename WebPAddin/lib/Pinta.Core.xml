@@ -58,6 +58,9 @@
             <summary>
             Inverts the selection.
             </summary>
+            <param name="surface">
+            Surface for the selection path.
+            </param>
             <param name="imageSize">
             The size of the document.
             </param>
@@ -114,6 +117,7 @@
             <param name="text">The history item's title.</param>
             <param name="passedTextSurface">The stored TextLayer surface.</param>
             <param name="passedUserSurface">The stored UserLayer surface.</param>
+            <param name="passedTextEngine">The text engine being used.</param>
             <param name="passedUserLayer">The UserLayer being modified.</param>
         </member>
         <member name="P:Pinta.Core.Document.Filename">
@@ -143,6 +147,9 @@
             <summary>
             Resizes the canvas.
             </summary>
+            <param name="width">The new width of the canvas.</param>
+            <param name="height">The new height of the canvas.</param>
+            <param name="anchor">Direction in which to adjust the canvas</param>
             <param name="compoundAction">
             Optionally, the history item for resizing the canvas can be added to
             a CompoundHistoryItem if it is part of a larger action (e.g. pasting an image).
@@ -340,7 +347,18 @@
             result of the form: c = F(a, b)
             </summary>
         </member>
-        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.BinaryPixelOp.Apply(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)-->
+        <member name="M:Pinta.Core.BinaryPixelOp.Apply(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)">
+            <summary>
+            Provides a default implementation for performing dst = F(lhs, rhs) over some rectangle of interest.
+            </summary>
+            <param name="dst">The Surface to write pixels to.</param>
+            <param name="dstOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the dst Surface.</param>
+            <param name="lhs">The Surface to read pixels from for the lhs parameter given to the method <b>ColorBgra Apply(ColorBgra, ColorBgra)</b>.</param>
+            <param name="lhsOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the lhs Surface.</param>
+            <param name="rhs">The Surface to read pixels from for the rhs parameter given to the method <b>ColorBgra Apply(ColorBgra, ColorBgra)</b></param>
+            <param name="rhsOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the rhs Surface.</param>
+            <param name="roiSize">The size of the rectangles-of-interest for all Surfaces.</param>
+        </member>
         <member name="T:Pinta.Core.BitVector2DSurfaceAdapter">
             <summary>
             Adapts a Surface class so it can be used as a two dimensional boolean array.
@@ -419,7 +437,7 @@
             <summary>
             Unregister an effect with Pinta, causing it to be removed from the Effects menu.
             </summary>
-            <param name="effect">The type of the effect to unregister</param>
+            <param name="effect_type">The type of the effect to unregister</param>
         </member>
         <member name="M:Pinta.Core.EffectsManager.UnregisterInstanceOfAdjustment(System.Type)">
             <summary>
@@ -519,18 +537,45 @@
             The Y coordinate of the canvas point
             </param>
         </member>
-        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.CairoExtensions.FixedStrokeExtents(Cairo.Context)-->
+        <member name="M:Pinta.Core.CairoExtensions.FixedStrokeExtents(Cairo.Context)">
+            <summary>
+            Computes a bounding box in user coordinates covering the
+            area that would be affected by a call to Context.Stroke()
+            using the current stroke parameters.
+            The rectangle returned by Cairo.Context.StrokeExtents()
+            incorrectly specifies the X and Y coordinates of the
+            bottom-right corner of the Rectangle in the width and
+            height members. This method corrects the rectangle to
+            contain the width and height in the width and height members.
+            </summary>
+            <returns>
+            The rectangle describing the area that would be
+            affected.
+            </returns>
+        </member>
         <member name="M:Pinta.Core.CairoExtensions.SetColorBgraUnchecked(Cairo.ImageSurface,Pinta.Core.ColorBgra*,System.Int32,Pinta.Core.ColorBgra,System.Int32,System.Int32)">
             <summary>
             For performance reasons, this method does not check that the x and y coordinates are
             within the bounds of the image.
             </summary>
         </member>
-        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.CairoExtensions.Inflate(Cairo.Rectangle,System.Int32,System.Int32)-->
+        <member name="M:Pinta.Core.CairoExtensions.Inflate(Cairo.Rectangle,System.Int32,System.Int32)">
+            <summary>
+            Creates a copy of the rectangle but with the side edges
+            moved out from the center by dx, and the top and bottom
+            edges moved out from the center by dy.  Edges are moved
+            inwards when dx or dy are negative.
+            </summary>
+            <param name="rect">The source rectangle.</param>
+            <param name="dx">Distance to move sides from center.</param>
+            <param name="dy">Distance to move top and bottom from center.</param>
+            <returns>The inflated (or deflated) rectangle.</returns>
+        </member>
         <member name="M:Pinta.Core.CairoExtensions.IsVisible(Cairo.ImageSurface,System.Int32,System.Int32)">
             <summary>
             Determines if the requested pixel coordinate is within bounds.
             </summary>
+            <param name="surf">The image surface to check against.</param>
             <param name="x">The x coordinate.</param>
             <param name="y">The y coordinate.</param>
             <returns>true if (x,y) is in bounds, false if it's not.</returns>
@@ -570,8 +615,6 @@
             <summary>
             Update the image preview widget of a FileChooserDialog
             </summary>
-            <param name="sender">
-            </param>
         </member>
         <member name="M:Pinta.Core.Layer.Rotate(System.Double)">
             <summary>
@@ -658,11 +701,8 @@
         </member>
         <member name="M:Pinta.Core.ColorBgra.NewAlpha(System.Byte)">
             <summary>
-            Gets the equivalent GDI+ PixelFormat.
+            Returns a new ColorBgra with the same color values but with a new alpha component value.
             </summary>
-            <remarks>
-            This property always returns PixelFormat.Format32bppArgb.
-            </remarks>
         </member>
         <member name="M:Pinta.Core.ColorBgra.FromRgba(System.Byte,System.Byte,System.Byte,System.Byte)">
             <summary>
@@ -711,7 +751,7 @@
         </member>
         <member name="M:Pinta.Core.ColorBgra.Blend(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Byte)">
             <summary>
-            Constructs a new ColorBgra instance from the values in the given Color instance.
+            Smoothly blends between two colors.
             </summary>
         </member>
         <member name="M:Pinta.Core.ColorBgra.Lerp(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Single)">
@@ -780,12 +820,6 @@
             <summary>
             Smoothly blends the given colors together, assuming equal weighting for each one.
             </summary>
-            <param name="colors">
-            </param>
-            <param name="colorCount">
-            </param>
-            <returns>
-            </returns>
         </member>
         <member name="M:Pinta.Core.ColorBgra.op_Explicit(Pinta.Core.ColorBgra)~System.UInt32">
             <summary>
@@ -871,7 +905,18 @@
             Computes alpha for r OVER l operation.
             </summary>
         </member>
-        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.PixelOp.ApplyBase(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)-->
+        <member name="M:Pinta.Core.PixelOp.ApplyBase(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)">
+            <summary>
+            Provides a default implementation for performing dst = F(dst, src) or F(src) over some rectangle
+            of interest. May be slightly faster than calling the other multi-parameter Apply method, as less
+            variables are used in the implementation, thus inducing less register pressure.
+            </summary>
+            <param name="dst">The Surface to write pixels to, and from which pixels are read and used as the lhs parameter for calling the method <b>ColorBgra Apply(ColorBgra, ColorBgra)</b>.</param>
+            <param name="dstOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the dst Surface.</param>
+            <param name="src">The Surface to read pixels from for the rhs parameter given to the method <b>ColorBgra Apply(ColorBgra, ColorBgra)</b>.</param>
+            <param name="srcOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the src Surface.</param>
+            <param name="roiSize">The size of the rectangles-of-interest for all Surfaces.</param>
+        </member>
         <member name="M:Pinta.Core.Utility.Blend(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Byte)">
             <summary>
             Smoothly blends between two colors.
@@ -882,8 +927,10 @@
             Allows you to find the bounding box for a "region" that is described as an
             array of bounding boxes.
             </summary>
-            <param name="rectsF">The "region" you want to find a bounding box for.</param>
-            <returns>A RectangleF structure that surrounds the Region.</returns>
+            <param name="rects">The "region" you want to find a bounding box for.</param>
+            <param name="startIndex">Index of the first rectangle in the array to examine.</param>
+            <param name="length">Number of rectangles to examine, beginning at <b>startIndex</b>.</param>
+            <returns>A rectangle that surrounds the region.</returns>
         </member>
         <member name="T:Pinta.Core.HsvColor">
             <summary>
@@ -916,54 +963,10 @@
             <param name="shape">The shape to draw.</param>
             <param name="shapeWidth">The width of the shape.</param>
             <param name="imgToShapeX">The horizontal distance between the image's top-left corner and the shape center.</param>
-            <param name="imgToShapeX">The verical distance between the image's top-left corner and the shape center.</param>
+            <param name="imgToShapeY">The verical distance between the image's top-left corner and the shape center.</param>
             <param name="shapeX">The X position in the returned Pixbuf that will be the center of the shape.</param>
             <param name="shapeY">The Y position in the returned Pixbuf that will be the center of the shape.</param>
             <returns>The new cursor icon with an shape that represents the tool's thickness.</returns>
-        </member>
-        <member name="T:Pinta.Core.ISurfaceDraw">
-            <summary>
-            Provides a standard interface for allowing an object to draw itself on to a given Surface.
-            </summary>
-        </member>
-        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface)">
-            <summary>
-            Draws the object on to the given Surface.
-            </summary>
-            <param name="dst">The Surface to draw to.</param>
-        </member>
-        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,Pinta.Core.PixelOp)">
-            <summary>
-            Draws the object on to the given Surface after passing each pixel through
-            the given pixel operation as in: dst = pixelOp(dst, src)
-            </summary>
-            <param name="dst">The Surface to draw to.</param>
-            <param name="pixelOp">The pixelOp to use for rendering.</param>
-        </member>
-        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,System.Int32,System.Int32)">
-            <summary>
-            Draws the object on to the given Surface starting at the given (x,y) offset.
-            </summary>
-            <param name="g">The Surface to draw to.</param>
-            <param name="transformX">The value to be added to every X coordinate that is used for drawing.</param>
-            <param name="transformY">The value to be added to every Y coordinate that is used for drawing.</param>
-        </member>
-        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,System.Int32,System.Int32,Pinta.Core.PixelOp)">
-            <summary>
-            Draws the object on to the given Surface starting at the given (x,y) offset after
-            passing each pixel through the given pixel operation as in: dst = pixelOp(dst, src)
-            </summary>
-            <param name="g">The Surface to draw to.</param>
-            <param name="transformX">The value to be added to every X coordinate that is used for drawing.</param>
-            <param name="transformY">The value to be added to every Y coordinate that is used for drawing.</param>
-        </member>
-        <member name="T:Pinta.Core.PlacedSurface">
-            <summary>
-            Encapsulates a surface ("what") along with a pixel offset ("where") which
-            defines where the surface would be drawn on to another surface.
-            Instances of this object are immutable -- once you create it, you can not
-            change it.
-            </summary>
         </member>
         <member name="T:Pinta.Core.ColorDifferenceEffect">
             <summary>
@@ -999,9 +1002,7 @@
             <summary>
             Imports a document into Pinta.
             </summary>
-            <param name="fileName">
-            The name of the file to be imported.
-            </param>
+            <param name="filename">The name of the file to be imported.</param>
         </member>
         <member name="M:Pinta.Core.IImageImporter.LoadThumbnail(System.String,System.Int32,System.Int32)">
             <summary>
@@ -1012,15 +1013,16 @@
             returned pixbuf will need to be rescaled by the calling code if it
             exceeds the maximum size.
             </summary>
-            <returns>
-            The thumbnail, or null if the image could not be loaded.
-            </returns>
-            <param name="maxWidth">
-            The maximum width of the thumbnail.
-            </param>
-            <param name="maxHeight">
-            The maximum height of the thumbnail.
-            </param>
+            <param name="filename">The name of the file to be imported.</param>
+            <param name="maxWidth">The maximum width of the thumbnail.</param>
+            <param name="maxHeight">The maximum height of the thumbnail.</param>
+            <returns>The thumbnail, or null if the image could not be loaded.</returns>
+        </member>
+        <member name="T:Pinta.Core.FormatDescriptor">
+            <summary>
+            Describes information about a file format, such as the
+            supported file extensions.
+            </summary>
         </member>
         <member name="F:Pinta.Core.TgaExporter.ImageIdField">
             <summary>
