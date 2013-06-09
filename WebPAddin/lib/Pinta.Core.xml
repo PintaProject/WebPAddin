@@ -1,0 +1,1043 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Pinta.Core</name>
+    </assembly>
+    <members>
+        <member name="M:Pinta.Core.DocumentSelection.Clone">
+            <summary>
+            Make a complete copy of the Selection.
+            </summary>
+            <returns>A copy of this Selection (as a DocumentSelection object).</returns>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.ConvertToPolygons(Cairo.Point[][])">
+            <summary>
+            Convert a Pinta Polygon set (Point[][]) to a Clipper Polygon collection (List[List[IntPoint]]).
+            </summary>
+            <param name="pintaPolygonSet">A Pinta Polygon set.</param>
+            <returns>A Clipper Polygon collection.</returns>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.ConvertToPolygonSet(System.Collections.Generic.List{System.Collections.Generic.List{ClipperLibrary.IntPoint}})">
+            <summary>
+            Convert a Clipper Polygon collection (List[List[IntPoint]]) to a Pinta Polygon set (Point[][]).
+            </summary>
+            <param name="clipperPolygons">A Clipper Polygon collection.</param>
+            <returns>A Pinta Polygon set.</returns>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.CreateEllipseSelection(Cairo.Surface,Cairo.Rectangle)">
+            <summary>
+            Create an elliptical Selection from a bounding Rectangle.
+            </summary>
+            <param name="selectionSurface">The selection surface to use for calculating the elliptical Path.</param>
+            <param name="r">The bounding Rectangle surrounding the ellipse.</param>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.CalculateCurvePoints(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Calculate each intermediate Point in the specified curve, returning Math.Round(1d / tInterval - 1d) number of Points.
+            </summary>
+            <param name="tInterval">The increment value for t (should be between 0-1).</param>
+            <param name="x0">Starting point X (not included in the returned Point(s)).</param>
+            <param name="y0">Starting point Y (not included in the returned Point(s)).</param>
+            <param name="x1">Control point 1 X.</param>
+            <param name="y1">Control point 1 Y.</param>
+            <param name="x2">Control point 2 X.</param>
+            <param name="y2">Control point 2 Y.</param>
+            <param name="x3">Ending point X (included in the returned Point(s)).</param>
+            <param name="y3">Ending point Y (included in the returned Point(s)).</param>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.CreateRectangleSelection(Cairo.Surface,Cairo.Rectangle)">
+            <summary>
+            Create a rectangular Selection from a Rectangle.
+            </summary>
+            <param name="selectionSurface">The selection surface to use for calculating the rectangular Path.</param>
+            <param name="r">The Rectangle.</param>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.Invert(Cairo.Surface,Gdk.Size)">
+            <summary>
+            Inverts the selection.
+            </summary>
+            <param name="imageSize">
+            The size of the document.
+            </param>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.DisposeSelection">
+            <summary>
+            Disposes of the old Selection without any intention of reusing it.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.DisposeSelectionPreserve">
+            <summary>
+            Disposes of the old Selection, but allows for reusability.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.DocumentSelection.ResetSelection(Cairo.Surface,Gdk.Size)">
+            <summary>
+            Reset (clear) the Selection.
+            </summary>
+            <param name="selectionSurface">
+            </param>
+            <param name="imageSize">
+            </param>
+        </member>
+        <member name="M:Pinta.Core.TextEngine.Clone">
+            <summary>
+            Performs a deep clone of the TextEngine instance and returns the clone.
+            </summary>
+            <returns>A clone of this TextEngine instance.</returns>
+        </member>
+        <member name="M:Pinta.Core.TextEngine.PerformPaste(Gtk.Clipboard)">
+            <summary>
+            Pastes text from the clipboard.
+            </summary>
+            <returns>
+                <c>true</c>, if the paste was successfully performed, <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="T:Pinta.Core.UserLayer">
+            <summary>
+            A UserLayer is a Layer that the user interacts with directly. Each UserLayer contains a TextLayer
+            and some other text related variables that allow for the re-editability of text.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.UserLayer.SetupTextLayer">
+            <summary>
+            Setup the TextLayer based on this UserLayer's Surface.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.TextHistoryItem.#ctor(System.String,System.String,Cairo.ImageSurface,Cairo.ImageSurface,Pinta.Core.TextEngine,Pinta.Core.UserLayer)">
+            <summary>
+            A history item for when text is created, edited, and/or finalized.
+            </summary>
+            <param name="icon">The history item's icon.</param>
+            <param name="text">The history item's title.</param>
+            <param name="passedTextSurface">The stored TextLayer surface.</param>
+            <param name="passedUserSurface">The stored UserLayer surface.</param>
+            <param name="passedUserLayer">The UserLayer being modified.</param>
+        </member>
+        <member name="P:Pinta.Core.Document.Filename">
+            <summary>
+            Just the file name, like "dog.jpg".
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.Document.Pathname">
+            <summary>
+            Just the directory name, like "C:\MyPictures".
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.Document.PathAndFileName">
+            <summary>
+            Directory and file name, like "C:\MyPictures\dog.jpg".
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.Document.GetComputedPixel(System.Int32,System.Int32)">
+            <summary>
+            Gets the final pixel color for the given point, taking layers, opacity, and blend modes into account.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.Document.GetSelectedBounds(System.Boolean)">
+            <param name="canvasOnly">false for the whole selection, true for the part only on our canvas</param>
+        </member>
+        <member name="M:Pinta.Core.Document.ResizeCanvas(System.Int32,System.Int32,Pinta.Core.Anchor,Pinta.Core.CompoundHistoryItem)">
+            <summary>
+            Resizes the canvas.
+            </summary>
+            <param name="compoundAction">
+            Optionally, the history item for resizing the canvas can be added to
+            a CompoundHistoryItem if it is part of a larger action (e.g. pasting an image).
+            </param>
+        </member>
+        <member name="M:Pinta.Core.Document.RotateImage(System.Double)">
+            <summary>
+            Rotates the image by the specified angle (in degrees)
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.Document.Paste(System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Pastes an image from the clipboard.
+            </summary>
+            <param name="toNewLayer">Set to TRUE to paste into a
+            new layer.  Otherwise, will paste to the current layer.</param>
+            <param name="x">Optional. Location within image to paste to.
+            Position will be adjusted if pasted image would hang
+            over right or bottom edges of canvas.</param>
+            <param name="y">Optional. Location within image to paste to.
+            Position will be adjusted if pasted image would hang
+            over right or bottom edges of canvas.</param>
+        </member>
+        <member name="M:Pinta.Core.Document.SignalSurfaceCloned">
+            <summary>
+            Signal to the TextTool that an ImageSurface was cloned.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.DocumentWorkspace.Invalidate(Gdk.Rectangle)">
+            <summary>
+            Repaints a rectangle region on the canvas.
+            </summary>
+            <param name="canvasRect">
+            The rectangle region of the canvas requiring repainting
+            </param>
+        </member>
+        <member name="M:Pinta.Core.DocumentWorkspace.IsPartiallyOffscreen(Gdk.Rectangle)">
+            <summary>
+            Determines whether the rectangle lies (at least partially) outside the canvas area.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.DocumentWorkspace.WindowPointToCanvas(System.Double,System.Double)">
+            <summary>
+            Converts a point from window coordinates to canvas coordinates
+            </summary>
+            <param name="x">
+            The X coordinate of the window point
+            </param>
+            <param name="y">
+            The Y coordinate of the window point
+            </param>
+        </member>
+        <member name="M:Pinta.Core.DocumentWorkspace.CanvasPointToWindow(System.Double,System.Double)">
+            <summary>
+            Converts a point from canvas coordinates to window coordinates
+            </summary>
+            <param name="x">
+            The X coordinate of the canvas point
+            </param>
+            <param name="y">
+            The Y coordinate of the canvas point
+            </param>
+        </member>
+        <member name="T:Pinta.Core.ScaleFactor">
+            <summary>
+            Encapsulates functionality for zooming/scaling coordinates.
+            Includes methods for Size[F]'s, Point[F]'s, Rectangle[F]'s,
+            and various scalars
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.ScaleFactor.PresetValues">
+            <summary>
+            Gets a list of values that GetNextLarger() and GetNextSmaller() will cycle through.
+            </summary>
+            <remarks>
+            1.0 is guaranteed to be in the array returned by this property. This list is also
+            sorted in ascending order.
+            </remarks>
+        </member>
+        <member name="M:Pinta.Core.ScaleFactor.GetNextLarger">
+            <summary>
+            Rounds the current scaling factor up to the next power of two.
+            </summary>
+            <returns>The new ScaleFactor value.</returns>
+        </member>
+        <member name="T:Pinta.Core.BaseEffect">
+            <summary>
+            The base class for all effects and adjustments.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.Name">
+            <summary>
+            Returns the name of the effect, displayed to the user in the Adjustments/Effects menu and history pad.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.Icon">
+            <summary>
+            Returns the icon to use for the effect in the Adjustments/Effects menu and history pad.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.IsConfigurable">
+            <summary>
+            Returns whether this effect can display a configuration dialog to the user. (Implemented by LaunchConfiguration ().)
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.AdjustmentMenuKey">
+            <summary>
+            Returns the keyboard shortcut for this adjustment. Only affects adjustments, not effects. Default is no shortcut.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.AdjustmentMenuKeyModifiers">
+            <summary>
+            Returns the modifier(s) to the keyboard shortcut. Only affects adjustments, not effects. Default is Ctrl+Shift.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.EffectMenuCategory">
+            <summary>
+            Returns the menu category for an effect. Only affects effects, not adjustments. Default is "General".
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.BaseEffect.EffectData">
+            <summary>
+            The user configurable data this effect uses.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.LaunchConfiguration">
+            <summary>
+            Launches the configuration dialog for this effect/adjustment.
+            </summary>
+            <returns>Whether the user accepted or cancelled the configuration dialog. (true: accept, false: cancel)</returns>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.Render(Cairo.ImageSurface,Cairo.ImageSurface,Gdk.Rectangle[])">
+            <summary>
+            Performs the actual work of rendering an effect. Do not call base.Render ().
+            </summary>
+            <param name="src">The source surface. DO NOT MODIFY.</param>
+            <param name="dst">The destination surface.</param>
+            <param name="rois">An array of rectangles of interest (roi) specifying the area(s) to modify. Only these areas should be modified.</param>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.Render(Cairo.ImageSurface,Cairo.ImageSurface,Gdk.Rectangle)">
+            <summary>
+            Performs the actual work of rendering an effect. Do not call base.Render ().
+            </summary>
+            <param name="src">The source surface. DO NOT MODIFY.</param>
+            <param name="dst">The destination surface.</param>
+            <param name="roi">A rectangle of interest (roi) specifying the area to modify. Only these areas should be modified</param>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.Render(Pinta.Core.ColorBgra*,Pinta.Core.ColorBgra*,System.Int32)">
+            <summary>
+            Performs the actual work of rendering an effect. This overload represent a single line of the image. Do not call base.Render ().
+            </summary>
+            <param name="src">The source surface. DO NOT MODIFY.</param>
+            <param name="dst">The destination surface.</param>
+            <param name="length">The number of pixels to render.</param>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.Render(Pinta.Core.ColorBgra)">
+            <summary>
+            Performs the actual work of rendering an effect. This overload represent a single pixel of the image.
+            </summary>
+            <param name="color">The color of the source surface pixel.</param>
+            <returns>The color to be used for the destination pixel.</returns>
+        </member>
+        <member name="M:Pinta.Core.BaseEffect.Clone">
+            <summary>
+            Clones this effect so the live preview system has a copy that won't change while it is working.  Only override this when a MemberwiseClone is not enough.
+            </summary>
+            <returns>An identical copy of this effect.</returns>
+        </member>
+        <member name="T:Pinta.Core.EffectData">
+            <summary>
+            Holds the user configurable data used by this effect.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.EffectData.Clone">
+            <summary>
+            Clones this EffectData so the live preview system has a copy that won't change while it is working.  Only override this when a MemberwiseClone is not enough.
+            </summary>
+            <returns>An identical copy of this EffectData.</returns>
+        </member>
+        <member name="M:Pinta.Core.EffectData.FirePropertyChanged(System.String)">
+            <summary>
+            Fires the PropertyChanged event for this ObservableObject.
+            </summary>
+            <param name="propertyName">The name of the property that changed.</param>
+        </member>
+        <member name="P:Pinta.Core.EffectData.IsDefault">
+            <summary>
+            Returns true if the current values of this EffectData do not modify the image. Returns false if current values modify the image.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.BinaryPixelOp">
+            <summary>
+            Defines a way to operate on a pixel, or a region of pixels, in a binary fashion.
+            That is, it is a simple function F that takes two parameters and returns a
+            result of the form: c = F(a, b)
+            </summary>
+        </member>
+        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.BinaryPixelOp.Apply(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)-->
+        <member name="T:Pinta.Core.BitVector2DSurfaceAdapter">
+            <summary>
+            Adapts a Surface class so it can be used as a two dimensional boolean array.
+            Elements are stored compactly, such that each pixel stores 32 boolean values.
+            However, the usable width is the same as that of the adapted surface.
+            (in other words, a surface that is 100 pixels wide can still only store 100
+            booleans per row)
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.Histogram">
+            <summary>
+            Histogram is used to calculate a histogram for a surface (in a selection,
+            if desired). This can then be used to retrieve percentile, average, peak,
+            and distribution information.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.Histogram.Clear">
+            <summary>
+            Sets the histogram to be all zeros.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.HistogramRgb">
+            <summary>
+            Histogram is used to calculate a histogram for a surface (in a selection,
+            if desired). This can then be used to retrieve percentile, average, peak,
+            and distribution information.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UserBlendOp">
+            <summary>
+            Abstract base class that all "user" blend ops derive from.
+            These ops are available in the UI for a user to choose from
+            in order to configure the blending properties of a Layer.
+            See UserBlendOps.cs for guidelines on implementation.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UserBlendOps">
+            <summary>
+            This class contains all the render ops that can be used by the user
+            to configure a layer's blending mode. It also contains helper
+            functions to aid in enumerating and using these blend ops.
+            Credit for mathematical descriptions of many of the blend modes goes to
+            a page on Pegtop Software's website called, "Blend Modes"
+            http://www.pegtop.net/delphi/articles/blendmodes/
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.UserBlendOps.GetBlendOps">
+            <summary>
+            Returns an array of Type objects that lists all of the pixel ops contained
+            within this class. You can then use Utility.GetStaticName to retrieve the
+            value of the StaticName property.
+            </summary>
+            <returns>
+            </returns>
+        </member>
+        <member name="T:Pinta.Core.EffectsManager">
+            <summary>
+            Provides methods for registering and unregistering effects and adjustments.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.EffectsManager.RegisterAdjustment(Pinta.Core.BaseEffect)">
+            <summary>
+            Register a new adjustment with Pinta, causing it to be added to the Adjustments menu.
+            </summary>
+            <param name="adjustment">The adjustment to register</param>
+            <returns>The action created for this adjustment</returns>
+        </member>
+        <member name="M:Pinta.Core.EffectsManager.RegisterEffect(Pinta.Core.BaseEffect)">
+            <summary>
+            Register a new effect with Pinta, causing it to be added to the Effects menu.
+            </summary>
+            <param name="effect">The effect to register</param>
+            <returns>The action created for this effect</returns>
+        </member>
+        <member name="M:Pinta.Core.EffectsManager.UnregisterInstanceOfEffect(System.Type)">
+            <summary>
+            Unregister an effect with Pinta, causing it to be removed from the Effects menu.
+            </summary>
+            <param name="effect">The type of the effect to unregister</param>
+        </member>
+        <member name="M:Pinta.Core.EffectsManager.UnregisterInstanceOfAdjustment(System.Type)">
+            <summary>
+            Unregister an effect with Pinta, causing it to be removed from the Adjustments menu.
+            </summary>
+            <param name="adjustment_type">The type of the adjustment to unregister</param>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.RegisterFormat(Pinta.Core.FormatDescriptor)">
+            <summary>
+            Registers a new file format.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.UnregisterFormatByExtension(System.String)">
+            <summary>
+            Unregisters the file format for the given extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetDefaultSaveFormat">
+            <summary>
+            Returns the default format that should be used when saving a file.
+            This is normally the last format that was chosen by the user.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetExporterByFile(System.String)">
+            <summary>
+            Finds the correct exporter to use for opening the given file, or null
+            if no exporter exists for the file.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetFormatByFile(System.String)">
+            <summary>
+            Finds the file format for the given file name, or null
+            if no file format exists for that file.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetImporterByFile(System.String)">
+            <summary>
+            Finds the correct importer to use for opening the given file, or null
+            if no importer exists for the file.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.SetDefaultFormat(System.String)">
+            <summary>
+            Sets the default format used when saving files to the given extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetExporterByExtension(System.String)">
+            <summary>
+            Finds the correct exporter to use for the given file extension, or null
+            if no exporter exists for that extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetImporterByExtension(System.String)">
+            <summary>
+            Finds the correct importer to use for the given file extension, or null
+            if no importer exists for that extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.GetFormatByExtension(System.String)">
+            <summary>
+            Finds the file format for the given file extension, or null
+            if no file format exists for that extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ImageConverterManager.NormalizeExtension(System.String)">
+            <summary>
+            Normalizes the extension.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.SystemManager.GetDialogDirectory">
+            <summary>
+            Returns a directory for use in a dialog. The last dialog directory is
+            returned if it exists, otherwise the default directory is used.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.WorkspaceManager.WindowPointToCanvas(System.Double,System.Double)">
+            <summary>
+            Converts a point from the active documents
+            window coordinates to canvas coordinates
+            </summary>
+            <param name="x">
+            The X coordinate of the window point
+            </param>
+            <param name="y">
+            The Y coordinate of the window point
+            </param>
+        </member>
+        <member name="M:Pinta.Core.WorkspaceManager.CanvasPointToWindow(System.Double,System.Double)">
+            <summary>
+            Converts a point from the active documents
+            canvas coordinates to window coordinates
+            </summary>
+            <param name="x">
+            The X coordinate of the canvas point
+            </param>
+            <param name="y">
+            The Y coordinate of the canvas point
+            </param>
+        </member>
+        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.CairoExtensions.FixedStrokeExtents(Cairo.Context)-->
+        <member name="M:Pinta.Core.CairoExtensions.SetColorBgraUnchecked(Cairo.ImageSurface,Pinta.Core.ColorBgra*,System.Int32,Pinta.Core.ColorBgra,System.Int32,System.Int32)">
+            <summary>
+            For performance reasons, this method does not check that the x and y coordinates are
+            within the bounds of the image.
+            </summary>
+        </member>
+        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.CairoExtensions.Inflate(Cairo.Rectangle,System.Int32,System.Int32)-->
+        <member name="M:Pinta.Core.CairoExtensions.IsVisible(Cairo.ImageSurface,System.Int32,System.Int32)">
+            <summary>
+            Determines if the requested pixel coordinate is within bounds.
+            </summary>
+            <param name="x">The x coordinate.</param>
+            <param name="y">The y coordinate.</param>
+            <returns>true if (x,y) is in bounds, false if it's not.</returns>
+        </member>
+        <member name="M:Pinta.Core.CairoExtensions.ContainsCorrect(Gdk.Rectangle,System.Int32,System.Int32)">
+            <summary>
+            There was a bug in gdk-sharp where this returns incorrect values.
+            We will probably have to use this for a long time until every distro
+            has an updated gdk.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.CairoExtensions.ContainsCorrect(Gdk.Rectangle,Gdk.Point)">
+            <summary>
+            There was a bug in gdk-sharp where this returns incorrect values.
+            We will probably have to use this for a long time until every distro
+            has an updated gdk.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.GdkExtensions.GetBottom(Gdk.Rectangle)">
+            <summary>
+            The implementation of Rectangle.Bottom was changed in 2.12.11 to fix an off-by-one error,
+            and this function provides the newer behaviour for backwards compatibility with older versions.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.GdkExtensions.GetRight(Gdk.Rectangle)">
+            <summary>
+            The implementation of Rectangle.Right was changed in 2.12.11 to fix an off-by-one error,
+            and this function provides the newer behaviour for backwards compatibility with older versions.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.GtkExtensions.AddImagePreview(Gtk.FileChooserDialog)">
+            <summary>
+            Initialize an image preview widget for the dialog
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.GtkExtensions.OnUpdateImagePreview(System.Object,System.EventArgs)">
+            <summary>
+            Update the image preview widget of a FileChooserDialog
+            </summary>
+            <param name="sender">
+            </param>
+        </member>
+        <member name="M:Pinta.Core.Layer.Rotate(System.Double)">
+            <summary>
+            Rotates layer by the specified angle (in degrees).
+            </summary>
+            <param name="angle">
+            Angle (in degrees).
+            </param>
+        </member>
+        <member name="M:Pinta.Core.ViewActions.TryParsePercent(System.String,System.Double@)">
+            <summary>
+            Converts the string representation of a percent (with or without a '%' sign) to a numeric value
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ViewActions.DefaultZoomIndex">
+            <summary>
+            Returns the index in the ZoomCollection of the default zoom level
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.ColorBgra">
+            <summary>
+            This is our pixel format that we will work with. It is always 32-bits / 4-bytes and is
+            always laid out in BGRA order.
+            Generally used with the Surface class.
+            </summary>
+        </member>
+        <member name="F:Pinta.Core.ColorBgra.Bgra">
+            <summary>
+            Lets you change B, G, R, and A at the same time.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.ColorBgra.Item(System.Int32)">
+            <summary>
+            Gets or sets the byte value of the specified color channel.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.GetIntensity">
+            <summary>
+            Gets the luminance intensity of the pixel based on the values of the red, green, and blue components. Alpha is ignored.
+            </summary>
+            <returns>A value in the range 0 to 1 inclusive.</returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.GetIntensityByte">
+            <summary>
+            Gets the luminance intensity of the pixel based on the values of the red, green, and blue components. Alpha is ignored.
+            </summary>
+            <returns>A value in the range 0 to 255 inclusive.</returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.GetMaxColorChannelValue">
+            <summary>
+            Returns the maximum value out of the B, G, and R values. Alpha is ignored.
+            </summary>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.GetAverageColorChannelValue">
+            <summary>
+            Returns the average of the B, G, and R values. Alpha is ignored.
+            </summary>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.op_Equality(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra)">
+            <summary>
+            Compares two ColorBgra instance to determine if they are equal.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.op_Inequality(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra)">
+            <summary>
+            Compares two ColorBgra instance to determine if they are not equal.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.Equals(System.Object)">
+            <summary>
+            Compares two ColorBgra instance to determine if they are equal.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.GetHashCode">
+            <summary>
+            Returns a hash code for this color value.
+            </summary>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.NewAlpha(System.Byte)">
+            <summary>
+            Gets the equivalent GDI+ PixelFormat.
+            </summary>
+            <remarks>
+            This property always returns PixelFormat.Format32bppArgb.
+            </remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromRgba(System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Creates a new ColorBgra instance with the given color and alpha values.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromRgb(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Creates a new ColorBgra instance with the given color values, and 255 for alpha.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromBgra(System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Creates a new ColorBgra instance with the given color and alpha values.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromBgraClamped(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a new ColorBgra instance with the given color and alpha values.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromBgraClamped(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a new ColorBgra instance with the given color and alpha values.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.BgraToUInt32(System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Packs color and alpha values into a 32-bit integer.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.BgraToUInt32(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Packs color and alpha values into a 32-bit integer.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromBgr(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Creates a new ColorBgra instance with the given color values, and 255 for alpha.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.FromUInt32(System.UInt32)">
+            <summary>
+            Constructs a new ColorBgra instance with the given 32-bit value.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.Blend(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Byte)">
+            <summary>
+            Constructs a new ColorBgra instance from the values in the given Color instance.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.Lerp(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Single)">
+            <summary>
+            Linearly interpolates between two color values.
+            </summary>
+            <param name="from">The color value that represents 0 on the lerp number line.</param>
+            <param name="to">The color value that represents 1 on the lerp number line.</param>
+            <param name="frac">A value in the range [0, 1].</param>
+            <remarks>
+            This method does a simple lerp on each color value and on the alpha channel. It does
+            not properly take into account the alpha channel's effect on color blending.
+            </remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.Lerp(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Double)">
+            <summary>
+            Linearly interpolates between two color values.
+            </summary>
+            <param name="from">The color value that represents 0 on the lerp number line.</param>
+            <param name="to">The color value that represents 1 on the lerp number line.</param>
+            <param name="frac">A value in the range [0, 1].</param>
+            <remarks>
+            This method does a simple lerp on each color value and on the alpha channel. It does
+            not properly take into account the alpha channel's effect on color blending.
+            </remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.BlendColors4W16IP(Pinta.Core.ColorBgra,System.UInt32,Pinta.Core.ColorBgra,System.UInt32,Pinta.Core.ColorBgra,System.UInt32,Pinta.Core.ColorBgra,System.UInt32)">
+            <summary>
+            Blends four colors together based on the given weight values.
+            </summary>
+            <returns>The blended color.</returns>
+            <remarks>
+            The weights should be 16-bit fixed point numbers that add up to 65536 ("1.0").
+            4W16IP means "4 colors, weights, 16-bit integer precision"
+            </remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.BlendColorsWAIP(Pinta.Core.ColorBgra[],System.UInt32[])">
+            <summary>
+            Blends the colors based on the given weight values.
+            </summary>
+            <param name="c">The array of color values.</param>
+            <param name="w">The array of weight values.</param>
+            <returns>
+            The weights should be fixed point numbers.
+            The total summation of the weight values will be treated as "1.0".
+            Each color will be blended in proportionally to its weight value respective to
+            the total summation of the weight values.
+            </returns>
+            <remarks>
+            "WAIP" stands for "weights, arbitrary integer precision"</remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.BlendColorsWFP(Pinta.Core.ColorBgra[],System.Double[])">
+            <summary>
+            Blends the colors based on the given weight values.
+            </summary>
+            <param name="c">The array of color values.</param>
+            <param name="w">The array of weight values.</param>
+            <returns>
+            Each color will be blended in proportionally to its weight value respective to
+            the total summation of the weight values.
+            </returns>
+            <remarks>
+            "WAIP" stands for "weights, floating-point"</remarks>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.Blend(Pinta.Core.ColorBgra*,System.Int32)">
+            <summary>
+            Smoothly blends the given colors together, assuming equal weighting for each one.
+            </summary>
+            <param name="colors">
+            </param>
+            <param name="colorCount">
+            </param>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.op_Explicit(Pinta.Core.ColorBgra)~System.UInt32">
+            <summary>
+            Casts a ColorBgra to a UInt32.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ColorBgra.op_Explicit(System.UInt32)~Pinta.Core.ColorBgra">
+            <summary>
+            Casts a UInt32 to a ColorBgra.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps">
+            <summary>
+            Provides a set of standard UnaryPixelOps.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.Identity">
+            <summary>
+            Passes through the given color value.
+            result(color) = color
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.Constant">
+            <summary>
+            Always returns a constant color.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.BlendConstant">
+            <summary>
+            Blends pixels with the specified constant color.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.SetChannel">
+            <summary>
+            Used to set a given channel of a pixel to a given, predefined color.
+            Useful if you want to set only the alpha value of a given region.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.SetAlphaChannel">
+            <summary>
+            Specialization of SetChannel that sets the alpha channel.
+            </summary>
+            <remarks>This class depends on the system being litte-endian with the alpha channel
+            occupying the 8 most-significant-bits of a ColorBgra instance.
+            By the way, we use addition instead of bitwise-OR because an addition can be
+            perform very fast (0.5 cycles) on a Pentium 4.</remarks>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.SetAlphaChannelTo255">
+            <summary>
+            Specialization of SetAlphaChannel that always sets alpha to 255.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.Invert">
+            <summary>
+            Inverts a pixel's color, and passes through the alpha component.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.RedEyeRemove">
+            <summary>
+            If the color is within the red tolerance, remove it
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.InvertWithAlpha">
+            <summary>
+            Inverts a pixel's color and its alpha component.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOps.AverageChannels">
+            <summary>
+            Averages the input color's red, green, and blue channels. The alpha component
+            is unaffected.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.UnaryPixelOp">
+            <summary>
+            Defines a way to operate on a pixel, or a region of pixels, in a unary fashion.
+            That is, it is a simple function F that takes one parameter and returns a
+            result of the form: d = F(c)
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.PixelOp.ComputeAlpha(System.Byte,System.Byte)">
+            <summary>
+            Computes alpha for r OVER l operation.
+            </summary>
+        </member>
+        <!--FIXME: Invalid documentation markup was found for member M:Pinta.Core.PixelOp.ApplyBase(Cairo.ImageSurface,Gdk.Point,Cairo.ImageSurface,Gdk.Point,Gdk.Size)-->
+        <member name="M:Pinta.Core.Utility.Blend(Pinta.Core.ColorBgra,Pinta.Core.ColorBgra,System.Byte)">
+            <summary>
+            Smoothly blends between two colors.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.Utility.GetRegionBounds(Gdk.Rectangle[],System.Int32,System.Int32)">
+            <summary>
+            Allows you to find the bounding box for a "region" that is described as an
+            array of bounding boxes.
+            </summary>
+            <param name="rectsF">The "region" you want to find a bounding box for.</param>
+            <returns>A RectangleF structure that surrounds the Region.</returns>
+        </member>
+        <member name="T:Pinta.Core.HsvColor">
+            <summary>
+            Adapted from:
+            "A Primer on Building a Color Picker User Control with GDI+ in Visual Basic .NET or C#"
+            http://www.msdnaa.net/Resources/display.aspx?ResID=2460
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.RgbColor">
+            <summary>
+            Adapted from:
+            "A Primer on Building a Color Picker User Control with GDI+ in Visual Basic .NET or C#"
+            http://www.msdnaa.net/Resources/display.aspx?ResID=2460
+            This class is only used by the ColorsForm and ColorWheel. Nothing else in this program
+            should be using it!
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.BaseTool.OnCommit">
+            <summary>
+            This is called whenever a menu option is called, for
+            tools that are in a temporary state while being used, and
+            need to commit their work when another option is selected.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.BaseTool.CreateIconWithShape(System.String,Pinta.Core.CursorShape,System.Int32,System.Int32,System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Create a cursor icon with a shape that visually represents the tool's thickness.
+            </summary>
+            <param name="imgName">A string containing the name of the tool's icon image to use.</param>
+            <param name="shape">The shape to draw.</param>
+            <param name="shapeWidth">The width of the shape.</param>
+            <param name="imgToShapeX">The horizontal distance between the image's top-left corner and the shape center.</param>
+            <param name="imgToShapeX">The verical distance between the image's top-left corner and the shape center.</param>
+            <param name="shapeX">The X position in the returned Pixbuf that will be the center of the shape.</param>
+            <param name="shapeY">The Y position in the returned Pixbuf that will be the center of the shape.</param>
+            <returns>The new cursor icon with an shape that represents the tool's thickness.</returns>
+        </member>
+        <member name="T:Pinta.Core.ISurfaceDraw">
+            <summary>
+            Provides a standard interface for allowing an object to draw itself on to a given Surface.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface)">
+            <summary>
+            Draws the object on to the given Surface.
+            </summary>
+            <param name="dst">The Surface to draw to.</param>
+        </member>
+        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,Pinta.Core.PixelOp)">
+            <summary>
+            Draws the object on to the given Surface after passing each pixel through
+            the given pixel operation as in: dst = pixelOp(dst, src)
+            </summary>
+            <param name="dst">The Surface to draw to.</param>
+            <param name="pixelOp">The pixelOp to use for rendering.</param>
+        </member>
+        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,System.Int32,System.Int32)">
+            <summary>
+            Draws the object on to the given Surface starting at the given (x,y) offset.
+            </summary>
+            <param name="g">The Surface to draw to.</param>
+            <param name="transformX">The value to be added to every X coordinate that is used for drawing.</param>
+            <param name="transformY">The value to be added to every Y coordinate that is used for drawing.</param>
+        </member>
+        <member name="M:Pinta.Core.ISurfaceDraw.Draw(Cairo.ImageSurface,System.Int32,System.Int32,Pinta.Core.PixelOp)">
+            <summary>
+            Draws the object on to the given Surface starting at the given (x,y) offset after
+            passing each pixel through the given pixel operation as in: dst = pixelOp(dst, src)
+            </summary>
+            <param name="g">The Surface to draw to.</param>
+            <param name="transformX">The value to be added to every X coordinate that is used for drawing.</param>
+            <param name="transformY">The value to be added to every Y coordinate that is used for drawing.</param>
+        </member>
+        <member name="T:Pinta.Core.PlacedSurface">
+            <summary>
+            Encapsulates a surface ("what") along with a pixel offset ("where") which
+            defines where the surface would be drawn on to another surface.
+            Instances of this object are immutable -- once you create it, you can not
+            change it.
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.ColorDifferenceEffect">
+            <summary>
+            ColorDifferenctEffect is a base class for my difference effects
+            that have floating point (double) convolution filters.
+            its architecture is just like ConvolutionFilterEffect, adding a
+            function (RenderColorDifferenceEffect) called from Render in each
+            derived class.
+            It is also limited to 3x3 kernels.
+            (Chris Crosetto)
+            </summary>
+        </member>
+        <member name="T:Pinta.Core.PixbufExtensions">
+            <summary>
+            Contains bindings for gdk_pixbuf_save_utf8 and gdk_pixbuf_savev_utf8, which are not exposed by gtk-sharp.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.IImageExporter.Export(Pinta.Core.Document,System.String,Gtk.Window)">
+            <summary>
+            Exports a document to a file.
+            </summary>
+            <param name="document">
+            The document to be saved.
+            </param>
+            <param name="fileName">
+            File name to save to.
+            </param>
+            <param name="parent">
+            Window to be used as a parent for any dialogs that are shown.
+            </param>
+        </member>
+        <member name="M:Pinta.Core.IImageImporter.Import(System.String)">
+            <summary>
+            Imports a document into Pinta.
+            </summary>
+            <param name="fileName">
+            The name of the file to be imported.
+            </param>
+        </member>
+        <member name="M:Pinta.Core.IImageImporter.LoadThumbnail(System.String,System.Int32,System.Int32)">
+            <summary>
+            Returns a thumbnail of an image.
+            If the format provides an efficient way to load a smaller version of
+            the image, it is suggested to use that method to load a thumbnail
+            no larger than the given width and height parameters. Otherwise, the
+            returned pixbuf will need to be rescaled by the calling code if it
+            exceeds the maximum size.
+            </summary>
+            <returns>
+            The thumbnail, or null if the image could not be loaded.
+            </returns>
+            <param name="maxWidth">
+            The maximum width of the thumbnail.
+            </param>
+            <param name="maxHeight">
+            The maximum height of the thumbnail.
+            </param>
+        </member>
+        <member name="F:Pinta.Core.TgaExporter.ImageIdField">
+            <summary>
+            The image ID field contents. It is important for this field to be non-empty, since
+            GDK incorrectly identifies the mime type as image/x-win-bitmap if the idLength
+            value is 0 (see bug #987641).
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.AddinActions.AddMenuItem(Gtk.Widget)">
+            <summary>
+            Adds a new item to the Add-ins menu.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.AddinActions.RemoveMenuItem(Gtk.Widget)">
+            <summary>
+            Removes an item from the Add-ins menu.
+            </summary>
+        </member>
+    </members>
+</doc>
