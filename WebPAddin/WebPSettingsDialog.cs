@@ -26,6 +26,7 @@
 
 using System;
 using Gtk;
+using Mono.Addins;
 
 namespace WebPAddin
 {
@@ -34,8 +35,8 @@ namespace WebPAddin
 		private HScale quality_factor;
 
 		public WebPSettingsDialog (Window parent, int default_quality) : base (
-			"WebP Quality", parent, DialogFlags.Modal, Stock.Cancel,
-			ResponseType.Cancel, Stock.Ok, ResponseType.Ok)
+			AddinManager.CurrentLocalizer.GetString ("WebP Quality"), parent, DialogFlags.Modal,
+			Stock.Cancel, ResponseType.Cancel, Stock.Ok, ResponseType.Ok)
 		{
 			BorderWidth = 6;
 			VBox.Spacing = 3;
@@ -44,7 +45,7 @@ namespace WebPAddin
 			// dialog if they don't need to adjust the setting.
 			DefaultResponse = ResponseType.Ok;
 
-			var label = new Label ("Quality Factor:");
+			var label = new Label (AddinManager.CurrentLocalizer.GetString ("Quality Factor:"));
 			label.Xalign = 0;
 			VBox.PackStart (label, false, false, 0);
 
