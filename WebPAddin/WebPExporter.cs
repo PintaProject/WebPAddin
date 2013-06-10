@@ -35,6 +35,15 @@ namespace WebPAddin
 	public class WebPExporter : Pinta.Core.IImageExporter
 	{
 		/// <summary>
+		/// ID for the WebP quality factor setting. This is used when saving or retrieving
+		/// the user's preferred quality setting from Pinta's settings.xml file.
+		/// </summary>
+		private const string WebPQualityFactorSetting = "webp-quality";
+
+		/// <summary>Default quality factor to use when no previous setting exists.</summary>
+		private const int DefaultQualityFactor = 85;
+
+		/// <summary>
 		/// Exports a document to a file.
 		/// </summary>
 		/// <param name='document'>
@@ -48,8 +57,27 @@ namespace WebPAddin
 		/// </param>
 		public void Export (Document document, string fileName, Window parent)
 		{
+			// Retrieve the last quality factor setting the user selected, or the default value.
+			int quality_factor = PintaCore.Settings.GetSetting<int> (WebPQualityFactorSetting,
+			                                                         DefaultQualityFactor);
+
+			// Don't repeatedly prompt the user after they've already selected a
+			// quality setting for this document.
+			if (!PintaCore.Workspace.ActiveDocument.HasBeenSavedInSession) {
+				var dialog = new WebPSettingsDialog (parent, quality_factor);
+				try {
+					if ((ResponseType)dialog.Run () == ResponseType.Ok) {
+						quality_factor = dialog.QualityFactor;
+					} else {
+						return;
+					}
+				} finally {
+					dialog.Destroy ();
+				}
+			}
+
+			// Merge all of the layers and convert the image to WebP.
 			using (var surface = document.GetFlattenedImage ()) {
-				// Encode the image.
 				var output = IntPtr.Zero;
 				uint length = NativeMethods.WebPEncodeBGRA (surface.Data, surface.Width, surface.Height,
 				                                            surface.Stride, 80, ref output);
@@ -61,6 +89,10 @@ namespace WebPAddin
 				// Save the encoded data to the file.
 				File.WriteAllBytes (fileName, data);
 			}
+
+			// Save the chosen quality setting to Pinta's settings file so that it
+			// can be the default the next time a file is saved.
+			PintaCore.Settings.PutSetting (WebPQualityFactorSetting, quality_factor);
 		}
 	}
 }

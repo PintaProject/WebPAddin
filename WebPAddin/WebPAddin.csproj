@@ -53,6 +53,7 @@
     <Compile Include="WebPImporter.cs" />
     <Compile Include="WebPExporter.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="WebPSettingsDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
