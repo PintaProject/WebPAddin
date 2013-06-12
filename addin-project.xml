@@ -27,7 +27,7 @@ THE SOFTWARE.
 -->
 
 <AddinProject appVersion="1.5">
-	<Project platforms="Linux">
+	<Project platforms="Windows">
 		<AddinFile>WebPAddin/bin/Debug/WebPAddin.dll</AddinFile>
 		<BuildFile>WebPAddin.sln</BuildFile>
 		<BuildConfiguration>Debug</BuildConfiguration>

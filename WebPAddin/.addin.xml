@@ -7,6 +7,9 @@
 		<Author>Pinta Project</Author>
                 <Url>https://github.com/PintaProject/WebPAddin</Url>
 	</Header>
+  <Runtime>
+    <Import file="libwebp.dll" />
+  </Runtime>
 	<Dependencies>
 		<Addin id="Pinta" version="1.5" />
 	</Dependencies>
