@@ -42,7 +42,11 @@ namespace WebPAddin
 		public static extern uint WebPEncodeBGRA(byte[] data, int width, int height, int stride,
 		                                         float quality_factor, ref IntPtr output);
 
-		[DllImport ("libc", EntryPoint="free")]
+		/// <summary>
+		/// WebPFreeArray is a custom function that was added as a wrapper around free(), since libwebp
+		/// doesn't provide a method to free the array. 
+		/// </summary>
+		[DllImport ("libwebp", EntryPoint = "WebPFreeArray")]
 		public static extern void Free (IntPtr ptr);
 	}
 }

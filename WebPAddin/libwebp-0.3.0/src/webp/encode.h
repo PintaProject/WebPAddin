@@ -35,6 +35,9 @@ typedef struct WebPMemoryWriter WebPMemoryWriter;
 // each of major/minor/revision. E.g: v2.5.7 is 0x020507.
 WEBP_EXTERN(int) WebPGetEncoderVersion(void);
 
+// Wrapper around free().
+WEBP_EXTERN(void) WebPFreeArray(uint8_t *data);
+
 //------------------------------------------------------------------------------
 // One-stop-shop call! No questions asked:
 

@@ -34,6 +34,10 @@ int WebPGetEncoderVersion(void) {
   return (ENC_MAJ_VERSION << 16) | (ENC_MIN_VERSION << 8) | ENC_REV_VERSION;
 }
 
+void WebPFreeArray(uint8_t *data) {
+  free(data);
+}
+
 //------------------------------------------------------------------------------
 // WebPPicture
 //------------------------------------------------------------------------------
