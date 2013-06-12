@@ -61,7 +61,7 @@
   <ItemGroup>
     <EmbeddedResource Include=".addin.xml" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)lib\libwebp.dll" "$(TargetDir)"</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(ProjectDir)lib\libwebp.dll" DestinationFolder="$(TargetDir)" />	  
+  </Target>
 </Project>
