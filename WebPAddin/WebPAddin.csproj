@@ -61,9 +61,7 @@
   <ItemGroup>
     <EmbeddedResource Include=".addin.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\libwebp.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)lib\libwebp.dll" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
