@@ -31,14 +31,14 @@ namespace WebPAddin
 {
 	public class NativeMethods
 	{
-		[DllImport ("libwebp")]
+		[DllImport ("webp")]
 		public static extern int WebPGetInfo(byte[] data, uint data_size, ref int width, ref int height);
 
-		[DllImport ("libwebp")]
+		[DllImport ("webp")]
 		public static extern UIntPtr WebPDecodeBGRAInto(byte[] data, uint data_size, byte[] output_buffer,
 		                                                int output_buffer_size, int output_stride);
 
-		[DllImport ("libwebp")]
+		[DllImport ("webp")]
 		public static extern uint WebPEncodeBGRA(byte[] data, int width, int height, int stride,
 		                                         float quality_factor, ref IntPtr output);
 
