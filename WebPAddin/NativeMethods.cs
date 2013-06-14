@@ -26,6 +26,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Mono.Addins;
 
 namespace WebPAddin
 {
@@ -44,6 +45,19 @@ namespace WebPAddin
 
 		[DllImport ("libc", EntryPoint="free")]
 		public static extern void Free (IntPtr ptr);
+
+		/// <summary>
+		/// Shows an error dialog if we were unable to load the libwebp library.
+		/// </summary>
+		/// <param name="parent">The parent window for the dialog that will be shown.</param>
+		public static void ShowErrorDialog (Gtk.Window parent)
+		{
+			var dialog = new Gtk.MessageDialog (parent, Gtk.DialogFlags.Modal, Gtk.MessageType.Error, Gtk.ButtonsType.Ok,
+			                                    AddinManager.CurrentLocalizer.GetString ("Could not load WebP library."));
+			dialog.Title = AddinManager.CurrentLocalizer.GetString ("Error");
+			dialog.Run ();
+			dialog.Destroy ();
+		}
 	}
 }
 

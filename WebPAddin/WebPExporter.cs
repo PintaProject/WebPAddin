@@ -79,15 +79,22 @@ namespace WebPAddin
 			// Merge all of the layers and convert the image to WebP.
 			using (var surface = document.GetFlattenedImage ()) {
 				var output = IntPtr.Zero;
-				uint length = NativeMethods.WebPEncodeBGRA (surface.Data, surface.Width, surface.Height,
-				                                            surface.Stride, 80, ref output);
-				byte[] data = new byte[length];
-				Marshal.Copy (output, data, 0, (int)length);
-				// The caller is responsible for calling free() with the array allocated by WebPEncodeBGRA.
-				NativeMethods.Free (output);
 
-				// Save the encoded data to the file.
-				File.WriteAllBytes (fileName, data);
+				try {
+					uint length = NativeMethods.WebPEncodeBGRA (surface.Data, surface.Width, surface.Height,
+					                                            surface.Stride, 80, ref output);
+					byte[] data = new byte[length];
+					Marshal.Copy (output, data, 0, (int)length);
+					// The caller is responsible for calling free() with the array allocated by WebPEncodeBGRA.
+					NativeMethods.Free (output);
+
+					// Save the encoded data to the file.
+					File.WriteAllBytes (fileName, data);
+
+				} catch (DllNotFoundException) {
+					NativeMethods.ShowErrorDialog (parent);
+					return;
+				}
 			}
 
 			// Save the chosen quality setting to Pinta's settings file so that it
