@@ -39,12 +39,16 @@ namespace WebPAddin
 		/// <param name='fileName'>
 		/// The name of the file to be imported.
 		/// </param>
-		public void Import (string filename)
+		/// <param name='parent'>
+		/// Window to be used as a parent for any dialogs that are shown.
+		/// </param>
+		public void Import (string filename, Gtk.Window parent)
 		{
-			int width, height, stride;
-			byte[] image_data;
+			int width = -1, height = -1, stride = -1;
+			byte[] image_data = null;
 
-			LoadImage (filename, out image_data, out width, out height, out stride);
+			if (!LoadImage (filename, ref image_data, ref width, ref height, ref stride, parent))
+				return;
 
 			// Create a new document and add an initial layer.
 			Document doc = PintaCore.Workspace.CreateAndActivateDocument (filename, new Size (width, height));
@@ -73,12 +77,16 @@ namespace WebPAddin
 		/// <param name='maxHeight'>
 		/// The maximum height of the thumbnail.
 		/// </param>
-		public Pixbuf LoadThumbnail (string filename, int maxWidth, int maxHeight)
+		/// <param name='parent'>
+		/// Window to be used as a parent for any dialogs that are shown.
+		/// </param>
+		public Pixbuf LoadThumbnail (string filename, int maxWidth, int maxHeight, Gtk.Window parent)
 		{
-			int width, height, stride;
-			byte[] image_data;
+			int width = -1, height = -1, stride = -1;
+			byte[] image_data = null;
 
-			LoadImage (filename, out image_data, out width, out height, out stride);
+			if (!LoadImage (filename, ref image_data, ref width, ref height, ref stride, parent))
+				return null;
 
 			using (var surf = new Cairo.ImageSurface (image_data, Cairo.Format.ARGB32, width, height, stride)) {
 				return surf.ToPixbuf ();
@@ -93,25 +101,32 @@ namespace WebPAddin
 		/// <param name="width">The width of the image.</param>
 		/// <param name="height">The height of the image.</param>
 		/// <param name="stride">The distance (in bytes) between scanlines.</param>
-		private static void LoadImage (string filename, out byte[] image_data,
-		                               out int width,out int height, out int stride)
+		private static bool LoadImage (string filename, ref byte[] image_data, ref int width,
+		                               ref int height, ref int stride, Gtk.Window parent)
 		{
-			byte[] raw_data = File.ReadAllBytes (filename);
-			uint raw_data_size = (uint)raw_data.Length;
-			width = 0;
-			height = 0;
+			try {
+				byte[] raw_data = File.ReadAllBytes (filename);
+				uint raw_data_size = (uint)raw_data.Length;
+				width = 0;
+				height = 0;
 
-			if (NativeMethods.WebPGetInfo (raw_data, raw_data_size, ref width, ref height) == 0)
-				throw new FormatException ("Error loading file info");
+				if (NativeMethods.WebPGetInfo (raw_data, raw_data_size, ref width, ref height) == 0)
+					throw new FormatException ("Error loading file info");
 
-			stride = width * ColorBgra.SizeOf;
-			int output_buffer_size = height * stride;
-			image_data = new byte[output_buffer_size];
+				stride = width * ColorBgra.SizeOf;
+				int output_buffer_size = height * stride;
+				image_data = new byte[output_buffer_size];
 
-			UIntPtr result = NativeMethods.WebPDecodeBGRAInto (raw_data, raw_data_size, image_data,
-			                                                   output_buffer_size, stride);
-			if (result == UIntPtr.Zero)
-				throw new FormatException ("Error loading file");
+				UIntPtr result = NativeMethods.WebPDecodeBGRAInto (raw_data, raw_data_size, image_data,
+				                                                   output_buffer_size, stride);
+				if (result == UIntPtr.Zero)
+					throw new FormatException ("Error loading file");
+			} catch (DllNotFoundException) {
+				NativeMethods.ShowErrorDialog (parent);
+				return false;
+			}
+
+			return true;
 		}
 
 		/// <summary>

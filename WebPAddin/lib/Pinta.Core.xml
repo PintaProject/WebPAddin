@@ -998,13 +998,16 @@
             Window to be used as a parent for any dialogs that are shown.
             </param>
         </member>
-        <member name="M:Pinta.Core.IImageImporter.Import(System.String)">
+        <member name="M:Pinta.Core.IImageImporter.Import(System.String,Gtk.Window)">
             <summary>
             Imports a document into Pinta.
             </summary>
             <param name="filename">The name of the file to be imported.</param>
+            <param name="parent">
+            Window to be used as a parent for any dialogs that are shown.
+            </param>
         </member>
-        <member name="M:Pinta.Core.IImageImporter.LoadThumbnail(System.String,System.Int32,System.Int32)">
+        <member name="M:Pinta.Core.IImageImporter.LoadThumbnail(System.String,System.Int32,System.Int32,Gtk.Window)">
             <summary>
             Returns a thumbnail of an image.
             If the format provides an efficient way to load a smaller version of
@@ -1016,6 +1019,9 @@
             <param name="filename">The name of the file to be imported.</param>
             <param name="maxWidth">The maximum width of the thumbnail.</param>
             <param name="maxHeight">The maximum height of the thumbnail.</param>
+            <param name="parent">
+            Window to be used as a parent for any dialogs that are shown.
+            </param>
             <returns>The thumbnail, or null if the image could not be loaded.</returns>
         </member>
         <member name="T:Pinta.Core.FormatDescriptor">
@@ -1023,6 +1029,37 @@
             Describes information about a file format, such as the
             supported file extensions.
             </summary>
+        </member>
+        <member name="P:Pinta.Core.FormatDescriptor.Extensions">
+            <summary>
+            A list of the supported extensions (for example, "jpeg" and "JPEG").
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.FormatDescriptor.Importer">
+            <summary>
+            The importer for this file format. This may be null if only exporting
+            is supported for this format.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.FormatDescriptor.Exporter">
+            <summary>
+            The exporter for this file format. This may be null if only importing
+            is supported for this format.
+            </summary>
+        </member>
+        <member name="P:Pinta.Core.FormatDescriptor.Filter">
+            <summary>
+            A file filter for use in the file dialog.
+            </summary>
+        </member>
+        <member name="M:Pinta.Core.FormatDescriptor.#ctor(System.String,System.String[],Pinta.Core.IImageImporter,Pinta.Core.IImageExporter)">
+            <param name="displayPrefix">
+            A descriptive name for the format, such as "OpenRaster". This will be displayed
+            in the file dialog's filter.
+            </param>
+            <param name="extensions">A list of supported file extensions (for example, "jpeg" and "JPEG").</param>
+            <param name="importer">The importer for this file format, or null if importing is not supported.</param>
+            <param name="exporter">The exporter for this file format, or null if exporting is not supported.</param>
         </member>
         <member name="F:Pinta.Core.TgaExporter.ImageIdField">
             <summary>
