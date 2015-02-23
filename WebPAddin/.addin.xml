@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Addin id="WebP" version="0.2" category="File Formats">
+<Addin id="WebP" version="0.2.1" category="File Formats">
 	<!-- This is the information shown in the add-in manager, with translations -->
 	<Header>
 		<Name>WebP</Name>
@@ -7,6 +7,9 @@
 		<Author>Pinta Project</Author>
                 <Url>https://github.com/PintaProject/WebPAddin</Url>
 	</Header>
+	<Runtime>
+		<Import file="WebPAddin.dll.config"/>
+	</Runtime>
 	<Dependencies>
 		<Addin id="Pinta" version="1.5" />
 	</Dependencies>

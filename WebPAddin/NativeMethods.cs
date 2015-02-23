@@ -53,7 +53,7 @@ namespace WebPAddin
 		public static void ShowErrorDialog (Gtk.Window parent)
 		{
 			var dialog = new Gtk.MessageDialog (parent, Gtk.DialogFlags.Modal, Gtk.MessageType.Error, Gtk.ButtonsType.Ok,
-			                                    AddinManager.CurrentLocalizer.GetString ("Could not load WebP library."));
+			                                    AddinManager.CurrentLocalizer.GetString ("Could not find an installed WebP library."));
 			dialog.Title = AddinManager.CurrentLocalizer.GetString ("Error");
 			dialog.Run ();
 			dialog.Destroy ();
